@@ -19,7 +19,7 @@ import io.apiman.common.es.util.AbstractEsComponent;
 import io.apiman.common.es.util.EsConstants;
 import io.apiman.common.es.util.EsUtils;
 import io.apiman.common.es.util.builder.index.EsIndexProperties;
-import io.apiman.common.logging.DefaultDelegateFactory;
+import io.apiman.common.logging.ApimanLoggerFactory;
 import io.apiman.common.logging.IApimanLogger;
 import io.apiman.gateway.engine.IRegistry;
 import io.apiman.gateway.engine.async.AsyncResultImpl;
@@ -75,7 +75,7 @@ import static io.apiman.gateway.engine.storage.util.BackingStoreUtil.JSON_MAPPER
  */
 public class EsRegistry extends AbstractEsComponent implements IRegistry {
 
-    private IApimanLogger logger = new DefaultDelegateFactory().createLogger(EsRegistry.class);
+    private final IApimanLogger LOGGER = ApimanLoggerFactory.getLogger(EsRegistry.class);
 
     /**
      * Constructor.
@@ -95,7 +95,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
             IndexRequest indexRequest = new IndexRequest(getIndexPrefix() + EsConstants.INDEX_APIS)
                     .id(id)
                     .source(JSON_MAPPER.writeValueAsBytes(api), XContentType.JSON)
-                    .setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+                    .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             IndexResponse response = getClient().index(indexRequest, RequestOptions.DEFAULT);
 
@@ -121,7 +121,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
         try {
             DeleteRequest deleteRequest = new DeleteRequest(getIndexPrefix() + EsConstants.INDEX_APIS)
                     .id(id)
-                    .setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+                    .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             DeleteResponse response = getClient().delete(deleteRequest, RequestOptions.DEFAULT);
 
@@ -148,7 +148,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
             IndexRequest indexRequest = new IndexRequest(getIndexPrefix() + EsConstants.INDEX_CLIENTS)
                     .source(JSON_MAPPER.writeValueAsBytes(client), XContentType.JSON)
                     .id(id)
-                    .setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+                    .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             IndexResponse response = getClient().index(indexRequest, RequestOptions.DEFAULT);
 
@@ -214,7 +214,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
 
             DeleteRequest deleteRequest = new DeleteRequest(getIndexPrefix() + EsConstants.INDEX_CLIENTS)
                     .id(id)
-                    .setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+                    .setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             DeleteResponse response = getClient().delete(deleteRequest, RequestOptions.DEFAULT);
             if (response.status().equals(RestStatus.OK)) {
@@ -433,7 +433,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
             handler.handle(AsyncResultImpl.create(results));
         }
         catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -461,7 +461,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
             handler.handle(AsyncResultImpl.create(results));
         }
         catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -488,7 +488,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
             handler.handle(AsyncResultImpl.create(results));
         }
         catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -544,7 +544,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
 
             handler.handle(AsyncResultImpl.create(results));
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 
@@ -601,7 +601,7 @@ public class EsRegistry extends AbstractEsComponent implements IRegistry {
 
             handler.handle(AsyncResultImpl.create(results));
         } catch (IOException e) {
-            logger.error(e.getMessage(), e);
+            LOGGER.error(e.getMessage(), e);
         }
     }
 

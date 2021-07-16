@@ -7,7 +7,6 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-api-config</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-manager-api-config</name>
   
   <dependencies>
@@ -31,12 +30,8 @@
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
@@ -55,17 +50,5 @@
         <filtering>true</filtering>
       </resource>
     </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Import-Package>!javax.enterprise.context,!javax.enterprise.inject,!javax.inject,*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 </project>

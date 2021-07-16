@@ -7,19 +7,10 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-gateway-engine-hazelcast</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-gateway-engine-hazelcast</name>
 
   <dependencies>
     <!-- Project Dependencies -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>apiman-common-util</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>apiman-gateway-engine-beans</artifactId>
-    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>apiman-gateway-engine-core</artifactId>
@@ -41,10 +32,6 @@
       <scope>provided</scope>
     </dependency>
     <dependency>
-      <groupId>commons-codec</groupId>
-      <artifactId>commons-codec</artifactId>
-    </dependency>
-    <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-api</artifactId>
     </dependency>
@@ -55,15 +42,11 @@
       <artifactId>slf4j-log4j12</artifactId>
       <scope>test</scope>
     </dependency>
+    <dependency>
+      <groupId>junit</groupId>
+      <artifactId>junit</artifactId>
+      <scope>test</scope>
+    </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
+  
 </project>

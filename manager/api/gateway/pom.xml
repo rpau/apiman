@@ -7,7 +7,6 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-api-gateway</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-manager-api-gateway</name>
 
   <dependencies>
@@ -58,7 +57,11 @@
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
     </dependency>
-
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
+    </dependency>
     <!-- Provided Dependencies -->
     <dependency>
       <groupId>javax.enterprise</groupId>
@@ -67,18 +70,4 @@
     </dependency>
   </dependencies>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Import-Package>!javax.enterprise.context,!javax.inject,*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 </project>

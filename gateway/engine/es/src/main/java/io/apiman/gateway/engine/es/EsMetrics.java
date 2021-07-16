@@ -56,7 +56,7 @@ import static io.apiman.gateway.engine.storage.util.BackingStoreUtil.JSON_MAPPER
  */
 public class EsMetrics extends AbstractEsComponent implements IMetrics {
 
-    private static final IApimanLogger logger = ApimanLoggerFactory.getLogger(EsMetrics.class);
+    private static final IApimanLogger LOGGER = ApimanLoggerFactory.getLogger(EsMetrics.class);
     private static final int DEFAULT_QUEUE_SIZE = 10000;
     private static final int DEFAULT_BATCH_SIZE = 1000;
 
@@ -66,6 +66,7 @@ public class EsMetrics extends AbstractEsComponent implements IMetrics {
 
     /**
      * Constructor.
+     *
      * @param config map of configuration options
      */
     public EsMetrics(Map<String, String> config) {
@@ -73,14 +74,14 @@ public class EsMetrics extends AbstractEsComponent implements IMetrics {
         int queueSize = DEFAULT_QUEUE_SIZE;
         String queueSizeConfig = config.get("queue.size"); //$NON-NLS-1$
         if (queueSizeConfig != null) {
-            queueSize = new Integer(queueSizeConfig);
+            queueSize = Integer.parseInt(queueSizeConfig);
         }
         queue = new LinkedBlockingDeque<>(queueSize);
 
         int batchSize = DEFAULT_BATCH_SIZE;
         String batchSizeConfig = config.get("batch.size"); //$NON-NLS-1$
         if (batchSizeConfig != null) {
-            batchSize = new Integer(batchSizeConfig);
+            batchSize = Integer.parseInt(batchSizeConfig);
         }
         this.batchSize = batchSize;
 
@@ -113,10 +114,10 @@ public class EsMetrics extends AbstractEsComponent implements IMetrics {
      */
     private void startConsumerThread() {
         Thread thread = new Thread(() -> {
-		    while (true) {
-		        processQueue();
-		    }
-		}, "EsMetricsConsumer"); //$NON-NLS-1$
+            while (true) {
+                processQueue();
+            }
+        }, "EsMetricsConsumer"); //$NON-NLS-1$
         thread.setDaemon(true);
         thread.start();
     }
@@ -147,12 +148,12 @@ public class EsMetrics extends AbstractEsComponent implements IMetrics {
 
                 @Override
                 public void onFailure(Exception e) {
-                    logger.error("Failed to add metric(s) to ES", e); //$NON-NLS-1$
+                    LOGGER.error("Failed to add metric(s) to ES", e); //$NON-NLS-1$
                 }
             };
             client.bulkAsync(request, RequestOptions.DEFAULT, listener);
         } catch (InterruptedException | JsonProcessingException e) {
-            logger.error("Failed to add metric(s) to ES", e); //$NON-NLS-1$
+            LOGGER.error("Failed to add metric(s) to ES", e); //$NON-NLS-1$
         }
     }
 

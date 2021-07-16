@@ -1030,7 +1030,13 @@ public class EsStorage extends AbstractEsComponent implements IStorage, IStorage
      */
     @Override
     public InputStream getApiDefinition(ApiVersionBean version) throws StorageException {
-        String id = id(version.getApi().getOrganization().getId(), version.getApi().getId(), version.getVersion()) + ":def"; //$NON-NLS-1$
+        return getApiDefinition(version.getApi().getOrganization().getId(), version.getApi().getId(), version.getVersion());
+    }
+
+    @Override
+    public InputStream getApiDefinition(String organizationId, String apiId, String version)
+        throws StorageException {
+        String id = id(organizationId, apiId, version) + ":def"; //$NON-NLS-1$
         Map<String, Object> source = getEntity(INDEX_MANAGER_POSTFIX_API_DEFINITION, id);
         if (source == null) {
             return null;
@@ -1985,8 +1991,8 @@ public class EsStorage extends AbstractEsComponent implements IStorage, IStorage
             String fullIndexName = getFullIndexName(type);
 
             IndexRequest indexRequest = new IndexRequest(fullIndexName).id(id).source(json, XContentType.JSON);
-            // WAIT_UNTIL same as "wait_for" => Leave this request open until a refresh has made the contents of this request visible to search
-            indexRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+            // Force an immediate reindex to avoid slowness waiting for ES to refresh.
+            indexRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             IndexResponse indexResponse = getClient().index(indexRequest, RequestOptions.DEFAULT);
 
@@ -2052,8 +2058,8 @@ public class EsStorage extends AbstractEsComponent implements IStorage, IStorage
     private void deleteEntity(String type, String id) throws StorageException {
         try {
             final DeleteRequest deleteRequest = new DeleteRequest(getFullIndexName(type), id);
-            // WAIT_UNTIL same as "wait_for" => Leave this request open until a refresh has made the contents of this request visible to search
-            deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+            // Force an immediate reindex to avoid slowness waiting for ES to refresh.
+            deleteRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
 
             DeleteResponse response = getClient().delete(deleteRequest, RequestOptions.DEFAULT);
             if (!response.status().equals(RestStatus.OK)) {
@@ -2078,8 +2084,8 @@ public class EsStorage extends AbstractEsComponent implements IStorage, IStorage
             String doc = Strings.toString(source);
             String fullIndexName = getFullIndexName(type);
             IndexRequest indexRequest = new IndexRequest(fullIndexName).id(id).source(doc, XContentType.JSON);
-            // WAIT_UNTIL same as "wait_for" => Leave this request open until a refresh has made the contents of this request visible to search
-            indexRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.WAIT_UNTIL);
+            // Force an immediate reindex to avoid slowness waiting for ES to refresh.
+            indexRequest.setRefreshPolicy(WriteRequest.RefreshPolicy.IMMEDIATE);
             getClient().index(indexRequest, RequestOptions.DEFAULT);
         } catch (Exception e) {
             throw new StorageException(e);

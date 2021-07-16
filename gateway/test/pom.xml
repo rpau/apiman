@@ -129,7 +129,7 @@
     </dependency>
     <dependency>
       <groupId>org.jboss.resteasy</groupId>
-      <artifactId>resteasy-jackson-provider</artifactId>
+      <artifactId>resteasy-jackson2-provider</artifactId>
     </dependency>
 
     <!-- Infinispan -->
@@ -149,10 +149,6 @@
     </dependency>
 
     <!-- Required Third Party Libs -->
-    <dependency>
-      <groupId>commons-io</groupId>
-      <artifactId>commons-io</artifactId>
-    </dependency>
     <dependency>
       <groupId>commons-dbcp</groupId>
       <artifactId>commons-dbcp</artifactId>

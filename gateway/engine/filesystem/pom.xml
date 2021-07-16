@@ -7,15 +7,10 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-gateway-engine-filesystem</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-gateway-engine-filesystem</name>
 
   <dependencies>
     <!-- Project Dependencies -->
-    <dependency>
-      <groupId>${project.groupId}</groupId>
-      <artifactId>apiman-common-util</artifactId>
-    </dependency>
     <dependency>
       <groupId>${project.groupId}</groupId>
       <artifactId>apiman-gateway-engine-beans</artifactId>
@@ -55,14 +50,4 @@
       <scope>test</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-      </plugin>
-    </plugins>
-  </build>
 </project>

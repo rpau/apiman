@@ -7,7 +7,6 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-api-beans</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-manager-api-beans</name>
 
   <dependencies>
@@ -51,16 +50,17 @@
       <type>pom</type>
     </dependency>
     <dependency>
-      <groupId>javax.xml.bind</groupId>
-      <artifactId>jaxb-api</artifactId>
-    </dependency>
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-core</artifactId>
+      <groupId>jakarta.xml.bind</groupId>
+      <artifactId>jakarta.xml.bind-api</artifactId>
     </dependency>
     <dependency>
       <groupId>com.sun.xml.bind</groupId>
       <artifactId>jaxb-impl</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.testcontainers</groupId>
+      <artifactId>junit-jupiter</artifactId>
+      <scope>test</scope>
     </dependency>
   </dependencies>
 
@@ -78,18 +78,5 @@
         </includes>
       </resource>
     </resources>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Export-Package>io.apiman.manager.api.beans.*</Export-Package>
-            <Import-Package>org.hibernate.proxy,javassist.util.proxy,!org.jboss.errai.common.client.api.annotations,*</Import-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
   </build>
 </project>

@@ -1,0 +1,6 @@
+name: core
+title: Development Guide
+version: 2.1.0.Final
+start_page: ROOT:development/Guide.adoc
+nav:
+  - modules/ROOT/nav.adoc

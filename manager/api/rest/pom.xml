@@ -7,7 +7,6 @@
     <version>2.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>apiman-manager-api-rest</artifactId>
-  <packaging>bundle</packaging>
   <name>apiman-manager-api-rest</name>
 
   <dependencies>
@@ -24,7 +23,7 @@
     <!-- Third Party Dependencies -->
     <dependency>
       <groupId>org.jboss.spec.javax.ws.rs</groupId>
-      <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
+      <artifactId>jboss-jaxrs-api_2.1_spec</artifactId>
       <scope>provided</scope>
     </dependency>
     <dependency>
@@ -42,21 +41,6 @@
       <scope>provided</scope>
     </dependency>
   </dependencies>
-
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.felix</groupId>
-        <artifactId>maven-bundle-plugin</artifactId>
-        <extensions>true</extensions>
-        <configuration>
-          <instructions>
-            <Export-Package>!io.apiman.manager.api.rest.exceptions.*,io.apiman.manager.api.rest.*</Export-Package>
-          </instructions>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
 
   <profiles>
     <profile>

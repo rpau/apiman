@@ -151,6 +151,10 @@ public class VertxEngineConfig implements IEngineConfig {
         return getConfig(config, GATEWAY_PLUGIN_REGISTRY_PREFIX);
     }
 
+    public JsonObject getPluginRegistryConfigJson() {
+        return config.getJsonObject(GATEWAY_PLUGIN_REGISTRY_PREFIX);
+    }
+
     @Override
     public Class<? extends IConnectorFactory> getConnectorFactoryClass(IPluginRegistry pluginRegistry) {
         return loadConfigClass(getClassname(config, GATEWAY_CONNECTOR_FACTORY_PREFIX),
@@ -384,7 +388,7 @@ public class VertxEngineConfig implements IEngineConfig {
             if (val instanceof Number) {
                 return (int) val;
             } else if (val instanceof String) {
-                return Integer.valueOf((String)val);
+                return Integer.parseInt((String)val);
             }
             throw new IllegalArgumentException("Expected integer, got " + obj.getClass().getName());
         }
@@ -394,8 +398,7 @@ public class VertxEngineConfig implements IEngineConfig {
      * @return a loaded class
      */
     @SuppressWarnings("unchecked")
-    protected <T> Class<? extends T> loadConfigClass(String className, Class<T> type, IPluginRegistry pluginRegistry, Class<? extends T> defaultClass) {
-        String componentSpec = className;
+    protected <T> Class<? extends T> loadConfigClass(String componentSpec, Class<T> type, IPluginRegistry pluginRegistry, Class<? extends T> defaultClass) {
         if (componentSpec == null) {
             return defaultClass;
         }
@@ -428,8 +431,8 @@ public class VertxEngineConfig implements IEngineConfig {
                 return (Class<T>) c;
             }
         } catch (ClassNotFoundException | InterruptedException | ExecutionException e) {
-            e.printStackTrace();
-            throw new IllegalStateException(Messages.getString("EngineConfig.FailedToLoadClass") + className);
+            logger.error("Failed to load class " + componentSpec, e);
+            throw new IllegalStateException(Messages.getString("EngineConfig.FailedToLoadClass") + componentSpec, e);
         }
 
     }

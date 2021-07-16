@@ -41,6 +41,17 @@
         <extension module="org.keycloak.keycloak-server-subsystem"/>
         <extension module="org.keycloak.keycloak-adapter-subsystem"/>
     </extensions>
+    <system-properties>
+        <!-- This property tells Apiman log via jboss logging. Apiman-specific logging config can
+        be set via the logging subsystem in this standalone.xml file. -->
+        <property name="apiman.logger-delegate" value="jboss-logging"/>
+
+        <!-- Keycloak will create the apiman realm based on a file-->
+        <property name="keycloak.migration.action" value="import"/>
+        <property name="keycloak.migration.provider" value="singleFile"/>
+        <property name="keycloak.migration.strategy" value="IGNORE_EXISTING"/>
+        <property name="keycloak.migration.file" value="${jboss.home.dir}/apiman/data/apiman-realm-for-keycloak.json"/>
+    </system-properties>
     <management>
         <security-realms>
             <security-realm name="UndertowRealm">
@@ -109,11 +120,15 @@
             <console-handler name="CONSOLE">
                 <level name="INFO"/>
                 <formatter>
+                    <!-- Uncomment to log as JSON. See formatter section below. -->
+<!--                    <named-formatter name="JSON"/> -->
                     <named-formatter name="COLOR-PATTERN"/>
                 </formatter>
             </console-handler>
             <periodic-rotating-file-handler name="FILE" autoflush="true">
                 <formatter>
+                <!-- Uncomment to log as JSON. See formatter section below. -->
+<!--                    <named-formatter name="JSON"/> -->
                     <named-formatter name="PATTERN"/>
                 </formatter>
                 <file relative-to="jboss.server.log.dir" path="server.log"/>
@@ -132,6 +147,9 @@
             <logger category="sun.rmi">
                 <level name="WARN"/>
             </logger>
+            <logger category="io.apiman">
+                <level name="INFO"/>
+            </logger>
             <root-logger>
                 <level name="INFO"/>
                 <handlers>
@@ -145,6 +163,10 @@
             <formatter name="COLOR-PATTERN">
                 <pattern-formatter pattern="%K{level}%d{HH:mm:ss,SSS} %-5p [%c] (%t) %s%e%n"/>
             </formatter>
+<!--            Default JSON format. More advanced customisations available. Refer to WildFly/EAP docs. -->
+<!--            <formatter name="JSON">-->
+<!--                <json-formatter/>-->
+<!--            </formatter>-->
         </subsystem>
         <subsystem xmlns="urn:jboss:domain:batch-jberet:2.0">
             <default-job-repository name="in-memory"/>
@@ -602,8 +624,8 @@
         <subsystem xmlns="urn:jboss:domain:undertow:11.0" default-server="default-server" default-virtual-host="default-host" default-servlet-container="default" default-security-domain="other" statistics-enabled="${wildfly.undertow.statistics-enabled:${wildfly.statistics-enabled:false}}">
             <buffer-cache name="default"/>
             <server name="default-server">
-                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true"/>
-                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" enable-http2="true"/>
+                <http-listener name="default" socket-binding="http" redirect-socket="https" enable-http2="true" max-post-size="268435456"/>
+                <https-listener name="https" socket-binding="https" security-realm="ApplicationRealm" enable-http2="true" max-post-size="268435456"/>
                 <host name="default-host" alias="localhost">
                     <location name="/" handler="welcome-content"/>
                     <http-invoker security-realm="ApplicationRealm"/>
